@@ -1,0 +1,32 @@
+{
+  "architectures": [
+    "GPTModelForTextGeneration"
+  ],
+  "auto_map": {
+    "AutoConfig": "configuration_gpt.GPTConfig",
+    "AutoModelForCausalLM": "modeling_gpt.GPTModelForTextGeneration"
+  },
+  "block_size": 1024,
+  "custom_pipelines": {
+    "text-generation": {
+      "default": {
+        "model": {
+          "pt": "samkeet/GPT_124M"
+        }
+      },
+      "impl": "pipeline_gpt.GPT124MTextGenerationPipeline",
+      "pt": [
+        "AutoModelForCausalLM"
+      ],
+      "tf": [],
+      "type": "text"
+    }
+  },
+  "model_type": "custom_gpt",
+  "n_embd": 768,
+  "n_head": 12,
+  "n_layer": 12,
+  "torch_dtype": "float32",
+  "transformers_version": "4.48.0",
+  "vocab_size": 50304
+}
