@@ -72,7 +72,7 @@ GPT-124M is a lightweight generative language model fine-tuned on the `fineweb-e
 ## Usage
 You can use this model for text generation using the `transformers` library.
 
-### Method 1: Using Pipeline
+### Method 2: Using Pipeline
 ```python
 # Import necessary modules from transformers
 from transformers import pipeline, AutoModelForCausalLM, AutoTokenizer
