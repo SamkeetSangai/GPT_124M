@@ -185,15 +185,13 @@ GPT-124M follows the architecture of OpenAI's GPT-2, which consists of:
 Gotcha — here’s a **tight, concise section** you can drop in **as-is**.
 It keeps only the essentials: **data, setup, choices, Kaggle**, no fluff.
 
----
-
 ## Instruction-Tuned Model
 
 ### Training Data
 
 The instruction-tuned GPT-124M is fine-tuned on the **`tatsu-lab/alpaca`** dataset, containing high-quality instruction–response pairs across reasoning, explanation, summarization, and creative tasks. Samples are **length-filtered** to fit the 1024-token context window, counting instruction, input, response, and EOS tokens.
 
-### Prompt and Objective
+### Prompt & Objective
 
 Training follows an Alpaca-style format:
 
