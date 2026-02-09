@@ -21,16 +21,16 @@ if "messages" not in st.session_state:
     st.session_state.messages = []
 
 if "max_length" not in st.session_state:
-    st.session_state.max_length = 50
+    st.session_state.max_length = 256
 
 if "do_sample" not in st.session_state:
     st.session_state.do_sample = True
 
 if "top_k" not in st.session_state:
-    st.session_state.top_k = 5
+    st.session_state.top_k = 20
 
 if "top_p" not in st.session_state:
-    st.session_state.top_p = 0.95
+    st.session_state.top_p = 0.90
 
 if "temperature" not in st.session_state:
     st.session_state.temperature = 0.9
@@ -53,14 +53,22 @@ def string_to_generator(text):
         time.sleep(0.005)
         yield char
 
+# Function to format prompt
+def format_prompt(prompt: str) -> str:
+    return f"""### Instruction:
+{prompt.strip()}
+
+### Response:
+"""
+
 
 # --- UI Controls for Generation Parameters ---
 st.sidebar.header("⚙️ Generation Settings")
 
 
-# Slider for max length (1 to 100)
+# Slider for max length (1 to 512)
 max_length = st.sidebar.slider(
-    "Max Length", min_value=1, max_value=100, key="max_length"
+    "Max Length", min_value=1, max_value=512, key="max_length"
 )
 
 # Toggle for `do_sample`
@@ -117,7 +125,7 @@ loading_messages = [
 
 # --- Chat Input ---
 if prompt := st.chat_input(
-    "The Earth revolves around", max_chars=400, key="chat_input"
+    "Type your question here…", max_chars=400, key="chat_input"
 ):
 
     # Save user message
@@ -129,7 +137,7 @@ if prompt := st.chat_input(
 
     # Generate response
     with st.chat_message("assistant"):
-        tokens = tokenizer.encode(prompt, return_tensors="pt")
+        tokens = tokenizer.encode(format_prompt(prompt), return_tensors="pt")
 
         with st.spinner(random.choice(loading_messages)):
             generated_tokens = model.generate(
@@ -141,7 +149,9 @@ if prompt := st.chat_input(
                 temperature=temperature if do_sample else 1.0,
             )
 
-            response_text = tokenizer.decode(generated_tokens)
+            response_text = tokenizer.decode(
+                generated_tokens[tokens.shape[1]:]
+            ).strip()
             response = st.write_stream(string_to_generator(response_text))
 
     # Save bot response
