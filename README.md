@@ -182,6 +182,50 @@ GPT-124M follows the architecture of OpenAI's GPT-2, which consists of:
 - **Software:** PyTorch, Hugging Face Transformers
 - **Precision:** FP32
 
+Gotcha — here’s a **tight, concise section** you can drop in **as-is**.
+It keeps only the essentials: **data, setup, choices, Kaggle**, no fluff.
+
+---
+
+## Instruction-Tuned Model
+
+### Training Data
+
+The instruction-tuned GPT-124M is fine-tuned on the **`tatsu-lab/alpaca`** dataset, containing high-quality instruction–response pairs across reasoning, explanation, summarization, and creative tasks. Samples are **length-filtered** to fit the 1024-token context window, counting instruction, input, response, and EOS tokens.
+
+### Prompt and Objective
+
+Training follows an Alpaca-style format:
+
+```
+### Instruction:
+<instruction and optional input>
+
+### Response:
+<target output>
+```
+
+Causal language modeling is used, with **loss applied only to response tokens** (prompt tokens masked with `-100`) and an explicit EOS token appended.
+
+### Training Setup
+
+* **Platform:** Kaggle (GPU-backed notebooks)
+* **Framework:** PyTorch
+* **Precision:** FP32
+* **Optimizer:** AdamW with warmup + cosine decay
+* **Stability:** Gradient clipping and fixed-length batching
+
+### Fine-Tuning Choices
+
+* Supports **full fine-tuning** and **LoRA-based parameter-efficient tuning**
+* LoRA can be merged into base weights for a standalone instruct model
+* Supervised fine-tuning (SFT) chosen for simplicity and reproducibility
+* No RLHF or safety-specific tuning applied
+
+### Outcome
+
+Instruction tuning improves instruction following, output structure, and task performance while preserving the base model’s generative capabilities. The model remains non-aligned and may hallucinate.
+
 ## Citation
 
 If you use this model, please cite:
